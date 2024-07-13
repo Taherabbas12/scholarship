@@ -29,17 +29,19 @@ class DatabaseHelper {
 
   static Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        user_tele TEXT,
-        name_project TEXT,
-        name_university TEXT,
-        total_price REAL,
-        is_done_project INTEGER,
-        is_done_price INTEGER
-      )
-    ''');
+    CREATE TABLE users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      user_tele TEXT,
+      name_project TEXT,
+      name_university TEXT,
+      total_price REAL,
+      is_done_project INTEGER,
+      is_done_price INTEGER,
+      dateStart TEXT,  -- حقل التاريخ الجديد
+      dateEnd TEXT  -- حقل التاريخ الجديد
+    )
+  ''');
   }
 
   static Future<int> insertUser(UserModel user) async {
