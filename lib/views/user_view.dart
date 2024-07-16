@@ -14,101 +14,94 @@ class UserView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            backgroundColor: ColorApp.primryColor,
-            centerTitle: true,
-            title: Text('إدارة المستخدمين',
-                style: TextStyle(color: ColorApp.wihteColor))),
-        body: Row(children: [
-          Container(
-            width: 330,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            color: ColorApp.primryColor.withOpacity(0.1),
-            child: Column(
-              children: [
-                const Spacer(flex: 5),
-                textInput('اسم الزبون', userController.name),
-                textInput('اسم الجامعه', userController.nameUniversity),
-                textInput('سعر المشروع', userController.totalPrice,
-                    isDigits: true),
-                textInput('معرف الزبون', userController.userTele),
-                textInput('اسم المشروع', userController.nameProject,
-                    maxLines: 3),
-                Obx(() => Column(
-                      children: [
-                        TextField(
-                          controller: TextEditingController(
-                              text: DateFormat.yMd().format(
-                                  userController.selectedDateStart.value)),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            hintText: 'تاريخ المشروع',
-                          ),
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate:
-                                  userController.selectedDateStart.value,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null &&
-                                pickedDate !=
-                                    userController.selectedDateStart.value) {
-                              userController.selectedDateStart.value =
-                                  pickedDate;
-                            }
-                          },
+    return Row(
+      children: [
+        Container(
+          width: 330,
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          color: ColorApp.primryColor.withOpacity(0.1),
+          child: Column(
+            children: [
+              const Spacer(flex: 5),
+              textInput('اسم الزبون', userController.name),
+              textInput('اسم الجامعه', userController.nameUniversity),
+              textInput('سعر المشروع', userController.totalPrice,
+                  isDigits: true),
+              textInput('معرف الزبون', userController.userTele),
+              textInput('اسم المشروع', userController.nameProject, maxLines: 3),
+              Obx(() => Column(
+                    children: [
+                      TextField(
+                        controller: TextEditingController(
+                            text: DateFormat.yMd().format(
+                                userController.selectedDateStart.value)),
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'تاريخ المشروع',
                         ),
-                        SizedBox(height: 5),
-                        TextField(
-                          controller: TextEditingController(
-                              text: DateFormat.yMd().format(
-                                  userController.selectedDateEnd.value)),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            hintText: 'تاريخ المشروع',
-                          ),
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: userController.selectedDateEnd.value,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null &&
-                                pickedDate !=
-                                    userController.selectedDateEnd.value) {
-                              userController.selectedDateEnd.value = pickedDate;
-                            }
-                          },
-                        )
-                      ],
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: userController.selectedDateStart.value,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+                          if (pickedDate != null &&
+                              pickedDate !=
+                                  userController.selectedDateStart.value) {
+                            userController.selectedDateStart.value = pickedDate;
+                          }
+                        },
+                      ),
+                      SizedBox(height: 5),
+                      TextField(
+                        controller: TextEditingController(
+                            text: DateFormat.yMd()
+                                .format(userController.selectedDateEnd.value)),
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'تاريخ المشروع',
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: userController.selectedDateEnd.value,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+                          if (pickedDate != null &&
+                              pickedDate !=
+                                  userController.selectedDateEnd.value) {
+                            userController.selectedDateEnd.value = pickedDate;
+                          }
+                        },
+                      ),
+                    ],
+                  )),
+              const Spacer(flex: 2),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(250, 40),
+                    backgroundColor: ColorApp.primryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     )),
-                const Spacer(flex: 2),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(250, 40),
-                      backgroundColor: ColorApp.primryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      )),
-                  onPressed: () async {
-                    await userController.addUserView();
-                  },
-                  child: Text(
-                    'أضافة الحساب',
-                    style: TextStyle(fontSize: 18, color: ColorApp.wihteColor),
-                  ),
+                onPressed: () async {
+                  await userController.addUserView();
+                },
+                child: Text(
+                  'أضافة الحساب',
+                  style: TextStyle(fontSize: 18, color: ColorApp.wihteColor),
                 ),
-                const Spacer(),
-              ],
-            ),
+              ),
+              const Spacer(),
+            ],
           ),
-          Expanded(child: Obx(() {
+        ),
+        Expanded(
+          child: Obx(() {
             if (userController.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -118,8 +111,8 @@ class UserView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     controller: userController.searchController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                       hintText: 'ابحث عن اسم المستخدم',
                     ),
                     onChanged: (value) {
@@ -132,67 +125,75 @@ class UserView extends StatelessWidget {
                       itemCount: userController.users.length,
                       itemBuilder: (context, index) {
                         final user = userController.users[index];
-                        return Card(
-                          margin: const EdgeInsets.all(10.0),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Table(
-                                  columnWidths: const {
-                                    0: FlexColumnWidth(1),
-                                    1: FlexColumnWidth(3),
-                                  },
-                                  children: [
-                                    _buildTableRow('ID', user.id.toString()),
-                                    _buildTableRow('Name', user.name),
-                                    _buildTableRow('User Tele', user.userTele),
-                                    _buildTableRow(
-                                        'Project Name', user.nameProject),
-                                    _buildTableRow(
-                                        'University Name', user.nameUniversity),
-                                    _buildTableRow('Total Price',
-                                        user.totalPrice.toString()),
-                                    _buildTableRow('Project Done',
-                                        user.isDoneProject ? 'Yes' : 'No'),
-                                    _buildTableRow('Price Done',
-                                        user.isDonePrice ? 'Yes' : 'No'),
-                                    _buildTableRow(
-                                        'Date Start',
-                                        DateFormat.yMd()
-                                            .format(user.dateStart)),
-                                    _buildTableRow('Date End',
-                                        DateFormat.yMd().format(user.dateEnd)),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () {
-                                        showEditUserDialog(user, context);
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {
-                                        userController.deleteUser(user.id!);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+                        return ExpansionTile(
+                          title: Text(
+                              'الاسم : (${user.name})  اسم الجامعه : (${user.nameUniversity}) اسم المشروع : (${user.nameUniversity})'),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Table(
+                                    columnWidths: const {
+                                      0: FlexColumnWidth(1),
+                                      1: FlexColumnWidth(3),
+                                    },
+                                    children: [
+                                      _buildTableRow('ID', user.id.toString()),
+                                      _buildTableRow('Name', user.name),
+                                      _buildTableRow(
+                                          'User Tele', user.userTele),
+                                      _buildTableRow(
+                                          'Project Name', user.nameProject),
+                                      _buildTableRow('University Name',
+                                          user.nameUniversity),
+                                      _buildTableRow('Total Price',
+                                          user.totalPrice.toString()),
+                                      _buildTableRow('Project Done',
+                                          user.isDoneProject ? 'Yes' : 'No'),
+                                      _buildTableRow('Price Done',
+                                          user.isDonePrice ? 'Yes' : 'No'),
+                                      _buildTableRow(
+                                          'Date Start',
+                                          DateFormat.yMd()
+                                              .format(user.dateStart)),
+                                      _buildTableRow(
+                                          'Date End',
+                                          DateFormat.yMd()
+                                              .format(user.dateEnd)),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        onPressed: () {
+                                          showEditUserDialog(user, context);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () {
+                                          userController.deleteUser(user.id!);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         );
                       }),
                 ),
               ],
             );
-          }))
-        ]));
+          }),
+        ),
+      ],
+    );
   }
 
   void showEditUserDialog(UserModel user, BuildContext context) {
@@ -206,7 +207,7 @@ class UserView extends StatelessWidget {
 
     Get.dialog(
       AlertDialog(
-        title: Text('تحرير المستخدم'),
+        title: const Text('تحرير المستخدم'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -222,8 +223,8 @@ class UserView extends StatelessWidget {
                           text: DateFormat.yMd()
                               .format(userController.selectedDateStart.value)),
                       readOnly: true,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         hintText: 'تاريخ المشروع',
                       ),
                       onTap: () async {
@@ -243,10 +244,10 @@ class UserView extends StatelessWidget {
                     TextField(
                       controller: TextEditingController(
                           text: DateFormat.yMd()
-                              .format(userController.selectedDateStart.value)),
+                              .format(userController.selectedDateEnd.value)),
                       readOnly: true,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         hintText: 'تاريخ المشروع',
                       ),
                       onTap: () async {
@@ -262,7 +263,7 @@ class UserView extends StatelessWidget {
                           userController.selectedDateEnd.value = pickedDate;
                         }
                       },
-                    )
+                    ),
                   ],
                 )),
           ],
@@ -270,11 +271,11 @@ class UserView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text('إلغاء'),
+            child: const Text('إلغاء'),
           ),
           ElevatedButton(
             onPressed: () => userController.editUser(user),
-            child: Text('حفظ التعديلات'),
+            child: const Text('حفظ التعديلات'),
           ),
         ],
       ),
@@ -303,7 +304,7 @@ class UserView extends StatelessWidget {
   }
 
   Widget textInput(String name, TextEditingController controller,
-      {bool isDigits = false, maxLines = 1}) {
+      {bool isDigits = false, int maxLines = 1}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: TextFormField(

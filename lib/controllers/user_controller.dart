@@ -6,6 +6,7 @@ import '../models/user_model.dart';
 
 class UserController extends GetxController {
   var users = <UserModel>[].obs;
+  var usersFilter = <UserModel>[].obs;
   var isLoading = false.obs;
   TextEditingController name = TextEditingController();
   TextEditingController userTele = TextEditingController();
@@ -26,6 +27,8 @@ class UserController extends GetxController {
   Future<void> fetchUsers() async {
     isLoading.value = true;
     users.value = await DatabaseHelper.getUsers();
+    users.value = users.reversed.toList();
+    usersFilter.value = [...users];
     isLoading.value = false;
   }
 
@@ -46,6 +49,14 @@ class UserController extends GetxController {
         dateStart: selectedDateStart.value,
         dateEnd: selectedDateEnd.value,
       )); // إضافة التاريخ
+      name.text = '';
+      nameProject.text = '';
+      nameUniversity.text = '';
+      totalPrice.text = '';
+      userTele.text = '';
+      userTele.text = '';
+      selectedDateStart.value = DateTime.now();
+      selectedDateEnd.value = DateTime.now();
     } else {
       Get.showSnackbar(const GetSnackBar(
           backgroundColor: Colors.red,
@@ -94,10 +105,14 @@ class UserController extends GetxController {
   }
 
   void searchUsers(String query) {
-    final filteredUsers = users.where((user) {
+    final filteredUsers = usersFilter.where((user) {
       final nameLower = user.name.toLowerCase();
+      final nameProjectLower = user.nameProject.toLowerCase();
+      final nameUniversityLoweer = user.nameUniversity.toLowerCase();
       final searchLower = query.toLowerCase();
-      return nameLower.contains(searchLower);
+      return nameLower.contains(searchLower) ||
+          nameProjectLower.contains(searchLower) ||
+          nameUniversityLoweer.contains(searchLower);
     }).toList();
     users.value = filteredUsers;
   }

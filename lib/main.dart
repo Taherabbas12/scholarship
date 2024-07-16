@@ -3,7 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'controllers/controller_home.dart';
+import 'views/home_view.dart';
 import 'views/user_view.dart';
+import '../controllers/user_controller.dart';
+import '../controllers/employee_controller.dart';
+import '../controllers/spending_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +29,30 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true),
-      home: UserView(),
+
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => HomeView(),
+          bindings: [
+            BindingsBuilder(() => Get.lazyPut(() => ControllerHome())),
+            BindingsBuilder(() => Get.lazyPut(() => UserController())),
+            BindingsBuilder(() => Get.lazyPut(() => EmployeeController())),
+            BindingsBuilder(() => Get.lazyPut(() => SpendingController())),
+          ],
+        ),
+      ],
+      // routes: {'/': () => HomeView()},
     );
   }
 }
+
+// class InitialBinding extends Bindings {
+//   @override
+//   void dependencies() {
+//     Get.lazyPut<ControllerHome>(() => ControllerHome());
+//     Get.lazyPut<UserController>(() => UserController());
+//     Get.lazyPut<EmployeeController>(() => EmployeeController());
+//     Get.lazyPut<SpendingController>(() => SpendingController());
+//   }
+// }
